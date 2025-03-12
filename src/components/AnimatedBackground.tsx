@@ -13,7 +13,7 @@ const AnimatedBackground = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     
-    // Set canvas size
+    // Set canvas dimensions
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -22,111 +22,130 @@ const AnimatedBackground = () => {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
     
-    // Create particles
-    const particlesCount = 50;
-    const particles: Particle[] = [];
+    // Animation properties
+    let animationFrameId: number;
+    const bubbles: Bubble[] = [];
+    const bubbleCount = 30;
     
-    interface Particle {
+    interface Bubble {
       x: number;
       y: number;
-      radius: number;
-      color: string;
-      speedX: number;
+      size: number;
       speedY: number;
+      color: string;
       opacity: number;
+      pulseSpeed: number;
+      pulseDirection: 1 | -1;
+      wobbleSpeed: number;
+      wobbleAmount: number;
+      wobbleOffset: number;
     }
     
-    // Define colors based on theme - with higher contrast
+    // Define colors based on theme
     const getColors = () => {
       return theme === "dark" 
-        ? ["#FF8A50", "#FFA07A", "#FFD700", "#87CEFA", "#E5DEFF"]  // Vibrant colors for dark theme
-        : ["#FF6724", "#D946EF", "#8B5CF6", "#0EA5E9", "#F97316"];  // Bold colors for light theme
+        ? ["#FF6724", "#D946EF", "#8B5CF6", "#0EA5E9", "#F97316"] 
+        : ["#FF8A50", "#D946EF", "#8B5CF6", "#87CEFA", "#FFD700"];
     };
     
-    // Initialize particles
-    const initParticles = () => {
+    // Create bubbles
+    const createBubbles = () => {
       const colors = getColors();
       
-      for (let i = 0; i < particlesCount; i++) {
-        particles.push({
+      for (let i = 0; i < bubbleCount; i++) {
+        bubbles.push({
           x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 6 + 3, // Increased size for better visibility
+          y: canvas.height + Math.random() * 100,
+          size: Math.random() * 100 + 50,
+          speedY: Math.random() * 0.8 + 0.2,
           color: colors[Math.floor(Math.random() * colors.length)],
-          speedX: Math.random() * 1 - 0.5,
-          speedY: Math.random() * 1 - 0.5,
-          opacity: Math.random() * 0.4 + 0.6 // Higher opacity for better visibility
+          opacity: Math.random() * 0.15 + 0.05,
+          pulseSpeed: Math.random() * 0.02 + 0.01,
+          pulseDirection: 1,
+          wobbleSpeed: Math.random() * 0.02 + 0.01,
+          wobbleAmount: Math.random() * 30 + 10,
+          wobbleOffset: Math.random() * Math.PI * 2
         });
       }
     };
     
-    initParticles();
+    createBubbles();
     
     // Animation loop
+    let time = 0;
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.01;
       
-      // Background gradient
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      // Clear canvas with gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       
       if (theme === "dark") {
-        gradient.addColorStop(0, "rgba(30, 30, 40, 1)");
-        gradient.addColorStop(1, "rgba(20, 20, 30, 1)");
+        gradient.addColorStop(0, "rgba(20, 20, 30, 1)");
+        gradient.addColorStop(1, "rgba(30, 30, 40, 1)");
       } else {
         gradient.addColorStop(0, "rgba(240, 240, 245, 1)");
-        gradient.addColorStop(1, "rgba(220, 220, 230, 1)");
+        gradient.addColorStop(1, "rgba(225, 225, 235, 1)");
       }
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw and update particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.globalAlpha = p.opacity;
-        ctx.fillStyle = p.color;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        
-        // Connect nearby particles with more visible lines
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 150) {
-            ctx.beginPath();
-            ctx.strokeStyle = theme === "dark" ? 
-              `rgba(255, 103, 36, ${0.2 * (1 - distance / 150)})` : 
-              `rgba(255, 103, 36, ${0.3 * (1 - distance / 150)})`;
-            ctx.lineWidth = 1.5; // Thicker lines
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-          }
-        }
+      // Update and draw bubbles
+      for (let i = 0; i < bubbles.length; i++) {
+        const b = bubbles[i];
         
         // Update position
-        p.x += p.speedX;
-        p.y += p.speedY;
+        b.y -= b.speedY;
         
-        // Bounce off edges
-        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+        // Wobble effect
+        const wobbleX = Math.sin(time * b.wobbleSpeed + b.wobbleOffset) * b.wobbleAmount;
+        
+        // Pulse size effect
+        if (b.pulseDirection === 1) {
+          b.size += b.pulseSpeed;
+          if (b.size > (Math.random() * 100 + 50) * 1.2) b.pulseDirection = -1;
+        } else {
+          b.size -= b.pulseSpeed;
+          if (b.size < (Math.random() * 100 + 50) * 0.8) b.pulseDirection = 1;
+        }
+        
+        // Draw bubble
+        ctx.beginPath();
+        ctx.globalAlpha = b.opacity;
+        
+        // Create gradient for bubble
+        const bubbleGradient = ctx.createRadialGradient(
+          b.x + wobbleX, b.y, 0,
+          b.x + wobbleX, b.y, b.size
+        );
+        
+        bubbleGradient.addColorStop(0, b.color);
+        bubbleGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+        
+        ctx.fillStyle = bubbleGradient;
+        ctx.arc(b.x + wobbleX, b.y, b.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Reset bubble if it goes out of screen
+        if (b.y < -b.size * 2) {
+          b.y = canvas.height + b.size;
+          b.x = Math.random() * canvas.width;
+        }
       }
       
-      requestAnimationFrame(animate);
+      ctx.globalAlpha = 1;
+      
+      // Continue animation loop
+      animationFrameId = requestAnimationFrame(animate);
     };
     
+    // Start animation
     animate();
     
+    // Cleanup
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [theme]);
   
