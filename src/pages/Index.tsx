@@ -1,93 +1,77 @@
 
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import CryptoHeader from "@/components/CryptoHeader";
-import BalanceCard from "@/components/BalanceCard";
-import PriceCard from "@/components/PriceCard";
-import ConversionCard from "@/components/ConversionCard";
-import TransactionsList from "@/components/TransactionsList";
-import PriceChart from "@/components/PriceChart";
-import { 
-  generateBalanceHistory, 
-  generateTransactions, 
-  exchangeRates, 
-  userBalances 
-} from "@/utils/mockData";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import LoginForm from "@/components/LoginForm";
+import { useLanguage } from "@/providers/LanguageProvider";
+
+const translations = {
+  "pt-BR": {
+    login: "Entrar",
+    register: "Cadastrar-se"
+  },
+  "en-US": {
+    login: "Login",
+    register: "Register"
+  },
+  "es-ES": {
+    login: "Iniciar sesión",
+    register: "Registrarse"
+  }
+};
 
 const Index = () => {
-  // State for active page in sidebar
-  const [activePage, setActivePage] = useState("dashboard");
-  
-  // Generate mock data
-  const balanceHistory = generateBalanceHistory(30, userBalances.BRL, userBalances.USDT, 0.03);
-  const transactions = generateTransactions(8);
-  
-  // Mock balance changes
-  const brlChange = { value: 0.20, percentage: 0.20 };
-  const usdtChange = { value: 0.50, percentage: 3.23 };
-  
+  const [activeTab, setActiveTab] = useState("login");
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar activePage={activePage} onNavigate={setActivePage} />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <CryptoHeader 
-          username="Gustavo" 
-          usdtBuyPrice={exchangeRates.USDT_BRL.buy} 
-          usdtSellPrice={exchangeRates.USDT_BRL.sell} 
+    <div className="flex min-h-screen bg-background">
+      {/* Left side - Logo and background */}
+      <div className="hidden lg:flex lg:w-1/2 bg-sidebar-background justify-center items-center relative">
+        <div className="absolute top-4 left-4 flex space-x-2">
+          <ThemeToggle />
+          <LanguageSelector />
+        </div>
+        <img 
+          src="/lovable-uploads/905a7c0e-2fb7-4bf6-97a2-9c5cabfc4a4c.png" 
+          alt="Logo" 
+          className="h-32 w-auto drop-shadow-xl"
         />
-        
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <BalanceCard 
-                label="Saldo BRL" 
-                balance={userBalances.BRL} 
-                currency="BRL" 
-                change={brlChange} 
-              />
-              <BalanceCard 
-                label="Saldo USDT" 
-                balance={userBalances.USDT} 
-                currency="USDT" 
-                change={usdtChange} 
-              />
-              <PriceCard 
-                label="USDT Compra" 
-                price={exchangeRates.USDT_BRL.buy} 
-                currency="BRL" 
-                type="buy" 
-              />
-              <PriceCard 
-                label="USDT Venda" 
-                price={exchangeRates.USDT_BRL.sell} 
-                currency="BRL" 
-                type="sell" 
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-              <div className="lg:col-span-2">
-                <PriceChart 
-                  data={balanceHistory} 
-                  title="Histórico de Saldo"
-                />
-              </div>
-              <div>
-                <ConversionCard 
-                  buyRate={exchangeRates.USDT_BRL.buy} 
-                  sellRate={exchangeRates.USDT_BRL.sell} 
-                />
-              </div>
-            </div>
-            
-            <div>
-              <TransactionsList transactions={transactions} />
-            </div>
+      </div>
+
+      {/* Right side - Login form */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8">
+        <div className="lg:hidden mb-8 flex justify-between w-full">
+          <img 
+            src="/lovable-uploads/905a7c0e-2fb7-4bf6-97a2-9c5cabfc4a4c.png" 
+            alt="Logo" 
+            className="h-12 w-auto"
+          />
+          <div className="flex space-x-2">
+            <ThemeToggle />
+            <LanguageSelector />
           </div>
-        </main>
+        </div>
+
+        <div className="w-full max-w-md bg-card border border-border/40 rounded-xl p-6 shadow-sm">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="login" className="text-base">{t.login}</TabsTrigger>
+              <TabsTrigger value="register" className="text-base">{t.register}</TabsTrigger>
+            </TabsList>
+            <TabsContent value="login">
+              <LoginForm />
+            </TabsContent>
+            <TabsContent value="register">
+              {/* Register form can be added later */}
+              <div className="h-[380px] flex items-center justify-center">
+                <p className="text-muted-foreground">Register form coming soon</p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
