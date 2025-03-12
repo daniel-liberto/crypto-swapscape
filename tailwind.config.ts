@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -66,7 +67,7 @@ export default {
           'up': '#00C853',
           'down': '#FF3D71',
           'neutral': '#8A98AC',
-          'usdt': '#26A17B',
+          'usdt': 'rgb(50, 155, 188)',
           'brl': '#22996E',
           'chart-line': '#3366FF',
           'chart-bg': '#131722'
