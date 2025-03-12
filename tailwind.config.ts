@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Crypto-specific colors
+				crypto: {
+					'up': '#00C853',
+					'down': '#FF3D71',
+					'neutral': '#8A98AC',
+					'usdt': '#26A17B',
+					'brl': '#22996E',
+					'chart-line': '#3366FF',
+					'chart-bg': '#131722'
 				}
 			},
 			borderRadius: {
@@ -84,11 +95,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-opacity': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-opacity 2s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'crypto-gradient': 'linear-gradient(180deg, rgba(19, 23, 34, 0) 0%, rgba(51, 102, 255, 0.1) 100%)'
 			}
 		}
 	},
