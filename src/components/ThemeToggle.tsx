@@ -12,15 +12,13 @@ export function ThemeToggle() {
       size="icon" 
       onClick={toggleTheme} 
       aria-label="Toggle theme"
-      className="transition-transform duration-300 hover:scale-105"
+      className="hover:scale-105"
     >
-      <span className="transition-all duration-500 ease-in-out">
-        {theme === "dark" ? (
-          <Sun size={18} className="transition-transform duration-300 rotate-0" />
-        ) : (
-          <Moon size={18} className="transition-transform duration-300 rotate-0" />
-        )}
-      </span>
+      {theme === "dark" ? (
+        <Sun size={18} />
+      ) : (
+        <Moon size={18} />
+      )}
     </Button>
   );
 }
