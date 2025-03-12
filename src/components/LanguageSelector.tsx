@@ -18,6 +18,9 @@ export function LanguageSelector() {
 
   // Find current language details
   const currentLanguage = languages.find(lang => lang.code === language);
+  
+  // Extract the country code from the language code (e.g., "BR" from "pt-BR")
+  const countryCode = language.split('-')[1];
 
   return (
     <DropdownMenu>
@@ -26,8 +29,11 @@ export function LanguageSelector() {
           variant="outline" 
           size="icon" 
           aria-label="Change language"
-          className="hover:scale-105"
+          className="hover:scale-105 relative"
         >
+          <span className="absolute -top-3 text-xs font-medium bg-background border border-border rounded-md px-1 py-0.5">
+            {countryCode}
+          </span>
           <Languages size={18} />
         </Button>
       </DropdownMenuTrigger>
