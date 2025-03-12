@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { RefreshCw, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
       setAmount(convertedAmount);
       setConvertedAmount(amount);
       setIsSwapping(false);
-    }, 400); // Slightly longer animation to accommodate all elements
+    }, 300); // Reduced to match the CSS transition duration
   };
   
   const handleAmountChange = (value: string) => {
@@ -75,7 +74,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
       
       <div className="space-y-4 flex-1 flex flex-col justify-between">
         <div className={cn(
-          "transition-transform duration-400 ease-in-out",
+          "transition-transform duration-300 ease-in-out",
           isSwapping && "translate-y-[120px]"
         )}>
           <div className="flex justify-between mb-1">
@@ -113,7 +112,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
         </div>
         
         <div className={cn(
-          "transition-transform duration-400 ease-in-out",
+          "transition-transform duration-300 ease-in-out",
           isSwapping && "-translate-y-[120px]"
         )}>
           <div className="flex justify-between mb-1">
