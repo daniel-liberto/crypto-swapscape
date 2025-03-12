@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 interface CryptoHeaderProps {
   username: string;
@@ -35,6 +36,7 @@ const CryptoHeader = ({ username, usdtBuyPrice, usdtSellPrice }: CryptoHeaderPro
       </div>
       
       <div className="flex items-center gap-4">
+        <LanguageSelector />
         <ThemeToggle />
         
         <Button variant="outline" size="icon" className="relative">
