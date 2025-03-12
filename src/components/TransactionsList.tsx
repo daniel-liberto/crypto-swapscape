@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown, Download, Upload, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import TransactionDetails from "./TransactionDetails";
 
-interface Transaction {
+export interface Transaction {
   id: string;
   date: string;
   type: "deposit" | "withdrawal" | "conversion";
@@ -25,6 +27,8 @@ interface TransactionsListProps {
 
 const TransactionsList = ({ transactions }: TransactionsListProps) => {
   const [filter, setFilter] = useState<"all" | "deposit" | "withdrawal" | "conversion">("all");
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   
   const filteredTransactions = filter === "all" 
     ? transactions 
@@ -46,6 +50,11 @@ const TransactionsList = ({ transactions }: TransactionsListProps) => {
       case "conversion": return <ChevronDown size={16} className="text-primary" />;
       default: return null;
     }
+  };
+
+  const handleRowClick = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setDetailsOpen(true);
   };
   
   return (
@@ -99,7 +108,11 @@ const TransactionsList = ({ transactions }: TransactionsListProps) => {
           </thead>
           <tbody>
             {filteredTransactions.map((tx) => (
-              <tr key={tx.id} className="border-b border-border/10 hover:bg-secondary/40 transition-colors">
+              <tr 
+                key={tx.id} 
+                className="border-b border-border/10 hover:bg-secondary/40 transition-colors cursor-pointer"
+                onClick={() => handleRowClick(tx)}
+              >
                 <td className="py-3 text-sm">{tx.date}</td>
                 <td className="py-3">
                   <div className="flex items-center gap-2">
@@ -129,6 +142,12 @@ const TransactionsList = ({ transactions }: TransactionsListProps) => {
           Nenhuma transação encontrada
         </div>
       )}
+
+      <TransactionDetails 
+        transaction={selectedTransaction}
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+      />
     </div>
   );
 };
