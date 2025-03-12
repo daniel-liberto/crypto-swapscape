@@ -31,10 +31,10 @@ export function LanguageSelector() {
           aria-label="Change language"
           className="hover:scale-105 relative"
         >
-          <span className="absolute -top-3 text-xs font-medium bg-background border border-border rounded-md px-1 py-0.5">
+          <Languages size={18} />
+          <span className="absolute -bottom-3 text-xs font-medium bg-background border border-border rounded-md px-1 py-0.5">
             {countryCode}
           </span>
-          <Languages size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[180px]">
