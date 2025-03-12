@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { RefreshCw, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
       setAmount(convertedAmount);
       setConvertedAmount(amount);
       setIsSwapping(false);
-    }, 300);
+    }, 400); // Slightly longer animation to accommodate all elements
   };
   
   const handleAmountChange = (value: string) => {
@@ -73,13 +74,13 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
       </div>
       
       <div className="space-y-4 flex-1 flex flex-col justify-between">
-        <div>
+        <div className={cn(
+          "transition-transform duration-400 ease-in-out",
+          isSwapping && "translate-y-[120px]"
+        )}>
           <div className="flex justify-between mb-1">
             <label className="text-sm text-muted-foreground">De</label>
-            <span className={cn(
-              "text-sm font-medium transition-all duration-300 transform",
-              isSwapping && "translate-y-[120px]"
-            )}>{fromCurrency}</span>
+            <span className="text-sm font-medium">{fromCurrency}</span>
           </div>
           <div className="relative">
             <Input 
@@ -91,8 +92,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
             />
             <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
               <span className={cn(
-                "font-medium transition-all duration-300 transform",
-                isSwapping && "translate-y-[120px]",
+                "font-medium",
                 fromCurrency === "BRL" ? "text-crypto-brl" : "text-crypto-usdt"
               )}>
                 {fromCurrency}
@@ -105,20 +105,20 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="rounded-full"
+            className="rounded-full z-10"
             onClick={handleSwapCurrencies}
           >
             <ArrowUpDown size={16} />
           </Button>
         </div>
         
-        <div>
+        <div className={cn(
+          "transition-transform duration-400 ease-in-out",
+          isSwapping && "-translate-y-[120px]"
+        )}>
           <div className="flex justify-between mb-1">
             <label className="text-sm text-muted-foreground">Para</label>
-            <span className={cn(
-              "text-sm font-medium transition-all duration-300 transform",
-              isSwapping && "-translate-y-[120px]"
-            )}>{toCurrency}</span>
+            <span className="text-sm font-medium">{toCurrency}</span>
           </div>
           <div className="relative">
             <Input 
@@ -130,8 +130,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
             />
             <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
               <span className={cn(
-                "font-medium transition-all duration-300 transform",
-                isSwapping && "-translate-y-[120px]",
+                "font-medium",
                 toCurrency === "BRL" ? "text-crypto-brl" : "text-crypto-usdt"
               )}>
                 {toCurrency}
