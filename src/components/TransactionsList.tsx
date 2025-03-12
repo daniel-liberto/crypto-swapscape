@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronDown, Download, Upload, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -100,7 +99,7 @@ const TransactionsList = ({ transactions }: TransactionsListProps) => {
           </thead>
           <tbody>
             {filteredTransactions.map((tx) => (
-              <tr key={tx.id} className="border-b border-border/10 hover:bg-secondary/20">
+              <tr key={tx.id} className="border-b border-border/10 hover:bg-secondary/40 transition-colors">
                 <td className="py-3 text-sm">{tx.date}</td>
                 <td className="py-3">
                   <div className="flex items-center gap-2">
