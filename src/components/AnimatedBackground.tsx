@@ -36,11 +36,11 @@ const AnimatedBackground = () => {
       opacity: number;
     }
     
-    // Define colors based on theme
+    // Define colors based on theme - with higher contrast
     const getColors = () => {
       return theme === "dark" 
-        ? ["#FF6724", "#FF8A50", "#FFB38A"]  // Orange shades for dark theme
-        : ["#FF6724", "#FF8A50", "#FFB38A"];  // Orange shades for light theme
+        ? ["#FF8A50", "#FFA07A", "#FFD700", "#87CEFA", "#E5DEFF"]  // Vibrant colors for dark theme
+        : ["#FF6724", "#D946EF", "#8B5CF6", "#0EA5E9", "#F97316"];  // Bold colors for light theme
     };
     
     // Initialize particles
@@ -51,11 +51,11 @@ const AnimatedBackground = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 5 + 2,
+          radius: Math.random() * 6 + 3, // Increased size for better visibility
           color: colors[Math.floor(Math.random() * colors.length)],
           speedX: Math.random() * 1 - 0.5,
           speedY: Math.random() * 1 - 0.5,
-          opacity: Math.random() * 0.5 + 0.1
+          opacity: Math.random() * 0.4 + 0.6 // Higher opacity for better visibility
         });
       }
     };
@@ -92,7 +92,7 @@ const AnimatedBackground = () => {
         ctx.fill();
         ctx.globalAlpha = 1;
         
-        // Connect nearby particles
+        // Connect nearby particles with more visible lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -102,9 +102,9 @@ const AnimatedBackground = () => {
           if (distance < 150) {
             ctx.beginPath();
             ctx.strokeStyle = theme === "dark" ? 
-              `rgba(255, 103, 36, ${0.1 * (1 - distance / 150)})` : 
-              `rgba(255, 103, 36, ${0.1 * (1 - distance / 150)})`;
-            ctx.lineWidth = 1;
+              `rgba(255, 103, 36, ${0.2 * (1 - distance / 150)})` : 
+              `rgba(255, 103, 36, ${0.3 * (1 - distance / 150)})`;
+            ctx.lineWidth = 1.5; // Thicker lines
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.stroke();
