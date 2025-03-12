@@ -1,4 +1,3 @@
-
 import { 
   Home, 
   ArrowDownToLine, 
@@ -48,9 +47,11 @@ const Sidebar = ({ activePage, onNavigate }: SidebarProps) => {
     <div className="w-64 h-screen bg-sidebar p-4 flex flex-col border-r border-border/40">
       <div className="mb-8 px-4 py-2">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">CS</span>
-          </div>
+          <img 
+            src="/lovable-uploads/905a7c0e-2fb7-4bf6-97a2-9c5cabfc4a4c.png" 
+            alt="Logo" 
+            className="h-8 w-8"
+          />
           <span className="text-xl font-bold text-foreground">CryptoSwap</span>
         </div>
       </div>
