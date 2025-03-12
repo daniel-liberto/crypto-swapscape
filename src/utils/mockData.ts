@@ -28,6 +28,39 @@ export const generatePriceData = (
   return data;
 };
 
+// Generate balance history data for chart
+export const generateBalanceHistory = (
+  days: number, 
+  startBalanceBRL: number,
+  startBalanceUSDT: number,
+  volatility: number = 0.03
+) => {
+  const data = [];
+  let currentBRL = startBalanceBRL;
+  let currentUSDT = startBalanceUSDT;
+  const now = new Date();
+  
+  for (let i = 0; i < days; i++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - (days - i - 1));
+    
+    // Random balance movements
+    const brlChange = (Math.random() - 0.45) * volatility * currentBRL;
+    const usdtChange = (Math.random() - 0.45) * volatility * currentUSDT;
+    
+    currentBRL = Math.max(0.01, currentBRL + brlChange);
+    currentUSDT = Math.max(0.01, currentUSDT + usdtChange);
+    
+    data.push({
+      date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      brl: parseFloat(currentBRL.toFixed(2)),
+      usdt: parseFloat(currentUSDT.toFixed(2))
+    });
+  }
+  
+  return data;
+};
+
 // Generate mock transactions
 export const generateTransactions = (count: number = 10) => {
   const types: ("deposit" | "withdrawal" | "conversion")[] = ["deposit", "withdrawal", "conversion"];

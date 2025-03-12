@@ -8,7 +8,7 @@ import ConversionCard from "@/components/ConversionCard";
 import TransactionsList from "@/components/TransactionsList";
 import PriceChart from "@/components/PriceChart";
 import { 
-  generatePriceData, 
+  generateBalanceHistory, 
   generateTransactions, 
   exchangeRates, 
   userBalances 
@@ -19,7 +19,7 @@ const Index = () => {
   const [activePage, setActivePage] = useState("dashboard");
   
   // Generate mock data
-  const priceData = generatePriceData(30, exchangeRates.USDT_BRL.buy, 0.005);
+  const balanceHistory = generateBalanceHistory(30, userBalances.BRL, userBalances.USDT, 0.03);
   const transactions = generateTransactions(8);
   
   // Mock balance changes
@@ -71,8 +71,8 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               <div className="lg:col-span-2">
                 <PriceChart 
-                  data={priceData} 
-                  currencyPair="USDT/BRL" 
+                  data={balanceHistory} 
+                  title="Histórico de Saldo"
                 />
               </div>
               <div>
