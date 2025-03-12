@@ -17,14 +17,19 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
   const [toCurrency, setToCurrency] = useState<"BRL" | "USDT">("USDT");
   const [amount, setAmount] = useState<string>("");
   const [convertedAmount, setConvertedAmount] = useState<string>("");
+  const [isRotating, setIsRotating] = useState(false);
   
   const rate = fromCurrency === "BRL" ? (1 / buyRate) : sellRate;
   
   const handleSwapCurrencies = () => {
-    setFromCurrency(toCurrency);
-    setToCurrency(fromCurrency);
-    setAmount(convertedAmount);
-    setConvertedAmount(amount);
+    setIsRotating(true);
+    setTimeout(() => {
+      setFromCurrency(toCurrency);
+      setToCurrency(fromCurrency);
+      setAmount(convertedAmount);
+      setConvertedAmount(amount);
+      setIsRotating(false);
+    }, 150);
   };
   
   const handleAmountChange = (value: string) => {
@@ -59,7 +64,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
   };
   
   return (
-    <div className="crypto-card p-5">
+    <div className="crypto-card p-5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Converter</h3>
         <div className="flex items-center text-sm text-muted-foreground">
@@ -68,7 +73,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
         </div>
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-4 flex-1 flex flex-col justify-between">
         <div>
           <div className="flex justify-between mb-1">
             <label className="text-sm text-muted-foreground">De</label>
@@ -93,11 +98,14 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
           </div>
         </div>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center my-6">
           <Button 
             variant="outline" 
             size="icon" 
-            className="rounded-full"
+            className={cn(
+              "rounded-full transition-transform duration-300",
+              isRotating && "rotate-180"
+            )}
             onClick={handleSwapCurrencies}
           >
             <ArrowUpDown size={16} />
@@ -129,7 +137,7 @@ const ConversionCard = ({ buyRate, sellRate }: ConversionCardProps) => {
         </div>
         
         <Button 
-          className="w-full"
+          className="w-full mt-6"
           onClick={handleConvert}
         >
           Converter {fromCurrency} para {toCurrency}
