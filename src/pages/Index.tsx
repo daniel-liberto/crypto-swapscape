@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import LoginForm from "@/components/LoginForm";
 import { useLanguage } from "@/providers/LanguageProvider";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 const translations = {
   "pt-BR": {
@@ -27,35 +28,26 @@ const Index = () => {
   const t = translations[language];
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Left side - Logo and background */}
-      <div className="hidden lg:flex lg:w-1/2 bg-sidebar-background justify-center items-center relative">
-        <div className="absolute top-4 left-4 flex space-x-2">
+    <div className="flex min-h-screen bg-background relative overflow-hidden">
+      {/* Animated Background */}
+      <AnimatedBackground />
+      
+      {/* Content overlay */}
+      <div className="flex flex-col w-full min-h-screen justify-center items-center relative z-10">
+        <div className="absolute top-4 right-4 flex space-x-2">
           <ThemeToggle />
           <LanguageSelector />
         </div>
-        <img 
-          src="/lovable-uploads/905a7c0e-2fb7-4bf6-97a2-9c5cabfc4a4c.png" 
-          alt="Logo" 
-          className="h-32 w-auto drop-shadow-xl"
-        />
-      </div>
-
-      {/* Right side - Login form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8">
-        <div className="lg:hidden mb-8 flex justify-between w-full">
+        
+        <div className="mb-8">
           <img 
             src="/lovable-uploads/905a7c0e-2fb7-4bf6-97a2-9c5cabfc4a4c.png" 
             alt="Logo" 
-            className="h-12 w-auto"
+            className="h-20 w-auto drop-shadow-lg"
           />
-          <div className="flex space-x-2">
-            <ThemeToggle />
-            <LanguageSelector />
-          </div>
         </div>
 
-        <div className="w-full max-w-md bg-card border border-border/40 rounded-xl p-6 shadow-sm">
+        <div className="w-full max-w-md bg-card/80 backdrop-blur-md border border-border/40 rounded-xl p-6 shadow-lg">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login" className="text-base">{t.login}</TabsTrigger>
